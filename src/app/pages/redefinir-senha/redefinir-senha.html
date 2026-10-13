@@ -1,0 +1,76 @@
+<main class="pagina-auth">
+  <section class="cartao caixa">
+    @if (concluido()) {
+      <div class="marca">
+        <span class="marca__icone">✅</span>
+        <h1>Senha alterada!</h1>
+        <p class="texto-suave">Tudo certo com a sua conta.</p>
+      </div>
+
+      <div class="mensagem-sucesso">Sua nova senha já está valendo. Entre com ela no Argos.</div>
+
+      <a class="botao botao--primario botao--cheio botao--link" routerLink="/login">
+        Ir para o login
+      </a>
+    } @else if (!token) {
+      <div class="marca">
+        <span class="marca__icone"><img src="argos-a.png" alt="" /></span>
+        <h1>Link inválido</h1>
+        <p class="texto-suave">Esse endereço não tem o código de redefinição.</p>
+      </div>
+
+      <a class="botao botao--primario botao--cheio botao--link" routerLink="/esqueci-senha">
+        Pedir um novo link
+      </a>
+    } @else {
+      <div class="marca">
+        <span class="marca__icone"><img src="argos-a.png" alt="" /></span>
+        <h1>Nova senha</h1>
+        <p class="texto-suave">Escolha uma senha com pelo menos 6 caracteres.</p>
+      </div>
+
+      @if (erro()) {
+        <div class="mensagem-erro">{{ erro() }}</div>
+        <p class="rodape"><a routerLink="/esqueci-senha">Pedir um novo link</a></p>
+      }
+
+      <form [formGroup]="formulario" (ngSubmit)="salvar()">
+        <div class="campo">
+          <label for="novaSenha">Nova senha</label>
+          <input
+            id="novaSenha"
+            type="password"
+            formControlName="novaSenha"
+            placeholder="Mínimo de 6 caracteres"
+            autocomplete="new-password"
+          />
+          @if (formulario.controls.novaSenha.touched && formulario.controls.novaSenha.invalid) {
+            <small class="ajuda-erro">A senha precisa ter pelo menos 6 caracteres.</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="repita">Repita a nova senha</label>
+          <input
+            id="repita"
+            type="password"
+            formControlName="repita"
+            placeholder="Digite a mesma senha"
+            autocomplete="new-password"
+          />
+          @if (senhasDiferentes()) {
+            <small class="ajuda-erro">As senhas não são iguais.</small>
+          }
+        </div>
+
+        <button
+          class="botao botao--primario botao--cheio"
+          type="submit"
+          [disabled]="formulario.invalid || senhasDiferentes() || carregando()"
+        >
+          {{ carregando() ? 'Salvando...' : 'Salvar nova senha' }}
+        </button>
+      </form>
+    }
+  </section>
+</main>

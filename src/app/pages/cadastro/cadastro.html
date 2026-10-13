@@ -12,6 +12,11 @@
         está nele para ativar a conta e depois faça login.
       </div>
 
+      <p class="texto-suave" style="text-align: center; margin: 0.75rem 0 0">
+        Não chegou? Veja o spam ou peça outro:
+      </p>
+      <app-reenviar-email [email]="email" />
+
       <a class="botao botao--primario botao--cheio botao--link" routerLink="/login">
         Ir para o login
       </a>

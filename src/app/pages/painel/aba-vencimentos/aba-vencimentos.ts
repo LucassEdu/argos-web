@@ -3,8 +3,10 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 
 import { mensagemDeErro } from '../../../core/erros';
 import { formatarMoeda } from '../../../core/formatos';
-import { PagamentoResponse, SituacaoPagamento } from '../../../core/models';
+import { Assinaturas } from '../../../core/assinaturas';
+import { AssinaturaResponse, PagamentoResponse, SituacaoPagamento } from '../../../core/models';
 import { Pagamentos } from '../../../core/pagamentos';
+import { Logo } from '../logo/logo';
 
 interface Grupo {
   id: string;
@@ -41,13 +43,17 @@ const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'o
 // Aba "Próximos vencimentos": régua do mês + lista de cobranças por urgência.
 @Component({
   selector: 'app-aba-vencimentos',
+  imports: [Logo],
   templateUrl: './aba-vencimentos.html',
   styleUrl: './aba-vencimentos.scss',
 })
 export class AbaVencimentos implements OnInit {
   private readonly api = inject(Pagamentos);
+  private readonly apiContas = inject(Assinaturas);
 
   protected readonly pagamentos = signal<PagamentoResponse[]>([]);
+  // Contas por id, só para pegar a logo de cada cobrança (o backend não repete a imagem em cada linha).
+  private readonly contas = signal<Map<number, AssinaturaResponse>>(new Map());
   protected readonly carregando = signal(true);
   protected readonly erro = signal<string | null>(null);
   protected readonly ocupadoId = signal<number | null>(null);
@@ -158,6 +164,12 @@ export class AbaVencimentos implements OnInit {
     this.carregando.set(true);
     this.erro.set(null);
 
+    // Se falhar, as linhas só ficam com o ícone da categoria / inicial.
+    this.apiContas.listar().subscribe({
+      next: (lista) => this.contas.set(new Map(lista.map((a) => [a.id, a]))),
+      error: () => undefined,
+    });
+
     this.api.listar().subscribe({
       next: (lista) => {
         this.pagamentos.set(lista);
@@ -194,6 +206,10 @@ export class AbaVencimentos implements OnInit {
         this.ocupadoId.set(null);
       },
     });
+  }
+
+  protected conta(assinaturaId: number): AssinaturaResponse | undefined {
+    return this.contas().get(assinaturaId);
   }
 
   // "2026-10-12" -> "12/10" (sem converter fuso, para não mudar o dia)

@@ -22,6 +22,21 @@ export class Auth {
     return this.http.post(`${API_URL}/auth/cadastro`, dados, { responseType: 'text' });
   }
 
+  // Pede um novo e-mail de confirmação (o backend responde com texto simples).
+  reenviarVerificacao(email: string): Observable<string> {
+    return this.http.post(`${API_URL}/auth/reenviar-verificacao`, { email }, { responseType: 'text' });
+  }
+
+  // "Esqueci minha senha": pede o e-mail com o link de redefinição.
+  esqueciSenha(email: string): Observable<string> {
+    return this.http.post(`${API_URL}/auth/esqueci-senha`, { email }, { responseType: 'text' });
+  }
+
+  // Troca a senha usando o código que veio no link do e-mail.
+  redefinirSenha(token: string, novaSenha: string): Observable<string> {
+    return this.http.post(`${API_URL}/auth/redefinir-senha`, { token, novaSenha }, { responseType: 'text' });
+  }
+
   // Faz login, guarda o token e já busca os dados do usuário logado.
   login(dados: LoginRequest): Observable<Me> {
     return this.http.post<LoginResponse>(`${API_URL}/auth/login`, dados).pipe(

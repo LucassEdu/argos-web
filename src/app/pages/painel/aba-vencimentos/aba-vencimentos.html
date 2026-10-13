@@ -103,6 +103,14 @@
               <small>{{ mes(p.dataVencimento) }}</small>
             </div>
 
+            <app-logo
+              [nome]="p.assinaturaNome"
+              [icone]="conta(p.assinaturaId)?.icone"
+              [logo]="conta(p.assinaturaId)?.logo"
+              [categoria]="p.categoria"
+              [tamanho]="2.6"
+            />
+
             <div class="linha__info">
               <span class="linha__nome">{{ p.assinaturaNome }}</span>
               <small class="linha__meta">

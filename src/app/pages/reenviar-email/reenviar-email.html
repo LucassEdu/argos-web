@@ -1,0 +1,23 @@
+<div class="reenvio">
+  <button
+    type="button"
+    class="reenvio__botao"
+    [disabled]="enviando() || espera() > 0"
+    (click)="reenviar()"
+  >
+    @if (enviando()) {
+      Enviando...
+    } @else if (espera() > 0) {
+      Reenviar em {{ espera() }}s
+    } @else {
+      Reenviar e-mail de confirmação
+    }
+  </button>
+
+  @if (mensagem()) {
+    <p class="reenvio__ok">{{ mensagem() }}</p>
+  }
+  @if (erro()) {
+    <p class="reenvio__erro">{{ erro() }}</p>
+  }
+</div>

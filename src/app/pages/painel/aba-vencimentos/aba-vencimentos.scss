@@ -320,7 +320,7 @@ svg {
 
 .linha {
   display: grid;
-  grid-template-columns: 3.4rem 1fr auto auto;
+  grid-template-columns: 3.4rem auto 1fr auto auto;
   align-items: center;
   gap: 1rem;
   padding: 0.85rem 1.1rem 0.85rem 1rem;
@@ -475,7 +475,7 @@ svg {
 /* ---------- Celular ---------- */
 @media (max-width: 640px) {
   .linha {
-    grid-template-columns: 3rem 1fr auto;
+    grid-template-columns: 3rem auto 1fr auto;
     gap: 0.75rem;
   }
 

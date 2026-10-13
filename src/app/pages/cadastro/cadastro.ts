@@ -6,10 +6,11 @@ import { RouterLink } from '@angular/router';
 import { Auth } from '../../core/auth';
 import { mensagemDeErro } from '../../core/erros';
 import { TipoPerfil } from '../../core/models';
+import { ReenviarEmail } from '../reenviar-email/reenviar-email';
 
 @Component({
   selector: 'app-cadastro',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ReenviarEmail],
   templateUrl: './cadastro.html',
   styleUrl: './cadastro.scss',
 })

@@ -1,0 +1,62 @@
+<main class="pagina-auth">
+  <section class="cartao caixa">
+    @if (enviado()) {
+      <div class="marca">
+        <span class="marca__icone">📬</span>
+        <h1>Confira seu e-mail</h1>
+        <p class="texto-suave">Pedido enviado.</p>
+      </div>
+
+      <div class="mensagem-sucesso">
+        Se existir uma conta com <strong>{{ formulario.controls.email.value }}</strong>, enviamos
+        um link para você escolher uma nova senha. Ele vale por 1 hora.
+      </div>
+
+      <p class="texto-suave" style="text-align: center; margin: 0.75rem 0 1rem">
+        Não chegou? Veja o spam ou
+        <button
+          type="button"
+          (click)="enviado.set(false)"
+          style="padding: 0; font: inherit; color: var(--cor-primaria); text-decoration: underline; background: none; border: 0; cursor: pointer"
+        >tente de novo</button>.
+      </p>
+
+      <a class="botao botao--primario botao--cheio botao--link" routerLink="/login">
+        Voltar para o login
+      </a>
+    } @else {
+      <div class="marca">
+        <span class="marca__icone"><img src="argos-a.png" alt="" /></span>
+        <h1>Esqueceu a senha?</h1>
+        <p class="texto-suave">Digite seu e-mail e enviaremos um link para criar uma nova.</p>
+      </div>
+
+      @if (erro()) {
+        <div class="mensagem-erro">{{ erro() }}</div>
+      }
+
+      <form [formGroup]="formulario" (ngSubmit)="enviar()">
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="voce@email.com"
+            autocomplete="email"
+          />
+        </div>
+
+        <button
+          class="botao botao--primario botao--cheio"
+          type="submit"
+          [disabled]="formulario.invalid || carregando()"
+        >
+          {{ carregando() ? 'Enviando...' : 'Enviar link' }}
+        </button>
+      </form>
+
+      <p class="rodape">Lembrou a senha? <a routerLink="/login">Entrar</a></p>
+    }
+  </section>
+</main>
