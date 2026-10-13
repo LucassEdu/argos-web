@@ -1,0 +1,127 @@
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.topo__titulo {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.estado {
+  text-align: center;
+  padding: 2.5rem 2rem;
+}
+
+/* ---------- Resumo no topo ---------- */
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.resumo__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--cor-superficie);
+  border-radius: var(--raio-grande);
+  box-shadow: var(--sombra-suave);
+}
+
+.resumo__rotulo {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+.resumo__valor {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--cor-primaria);
+}
+
+.resumo__valor--texto {
+  font-size: 1.5rem;
+  line-height: 2.85rem;
+}
+
+/* ---------- Gráficos ---------- */
+.paineis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.grafico {
+  padding: 1.4rem 1.5rem;
+  background: var(--cor-superficie);
+  border-radius: var(--raio-grande);
+  box-shadow: var(--sombra-suave);
+
+  h3 {
+    margin: 0 0 1rem;
+    font-size: 1.05rem;
+  }
+}
+
+.grafico__area {
+  position: relative;
+  height: 280px;
+}
+
+.grafico__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.grafico__area--rosca {
+  height: 240px;
+}
+
+.vazio {
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* ---------- Legenda da rosca ---------- */
+.legenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr auto 3rem;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+  }
+}
+
+.legenda__cor {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+}
+
+.legenda__nome {
+  font-weight: 700;
+}
+
+.legenda__valor {
+  font-weight: 800;
+}
+
+.legenda__pct {
+  text-align: right;
+  color: var(--cor-texto-suave);
+}

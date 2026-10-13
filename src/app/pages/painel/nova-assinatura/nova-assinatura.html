@@ -1,0 +1,251 @@
+<div class="fundo" (click)="fechar.emit()" (window:keydown.escape)="fechar.emit()">
+  <form class="painel" [formGroup]="form" (ngSubmit)="salvar()" (click)="$event.stopPropagation()">
+    <header class="painel__topo">
+      <div>
+        <h2>{{ fase() === 'escolher' ? 'Qual serviço?' : conta() ? 'Editar conta' : 'Nova conta' }}</h2>
+        <p>
+          {{
+            fase() === 'escolher'
+              ? 'Escolha da lista ou adicione um que não esteja nela.'
+              : conta()
+                ? 'Altere o que precisar e salve.'
+                : 'Preencha o essencial. O resto o Argos cuida.'
+          }}
+        </p>
+      </div>
+      <button class="x" type="button" aria-label="Fechar" (click)="fechar.emit()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </header>
+
+    @if (fase() === 'escolher') {
+      <div class="painel__corpo">
+        <input
+          class="busca"
+          type="search"
+          placeholder="Buscar: Netflix, aluguel, internet..."
+          autocomplete="off"
+          (input)="busca.set($any($event.target).value)"
+          (keydown.enter)="$event.preventDefault()"
+        />
+
+        <button class="outro" type="button" (click)="outroServico()">
+          <span class="outro__mais">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+          </span>
+          <span>
+            @if (busca().trim()) {
+              Adicionar "{{ busca().trim() }}"
+            } @else {
+              Outro serviço
+            }
+            <small>Não está na lista? Cadastre com seu próprio nome e logo.</small>
+          </span>
+        </button>
+
+        @if (meusFiltrados().length > 0) {
+          <section class="grupo">
+            <h3>Criados por você</h3>
+            <div class="catalogo">
+              @for (s of meusFiltrados(); track s.id) {
+                <div class="opcao-caixa">
+                  @if (removendoId() === s.id) {
+                    <div class="opcao opcao--remover">
+                      <span>Remover?</span>
+                      <div class="opcao__sn">
+                        <button type="button" class="sim" (click)="confirmarRemocao(s)">Sim</button>
+                        <button type="button" (click)="cancelarRemocao()">Não</button>
+                      </div>
+                    </div>
+                  } @else {
+                    <button class="opcao" type="button" (click)="escolherMeu(s)">
+                      <app-logo [nome]="s.nome" [logo]="s.logo" [categoria]="s.categoria" [tamanho]="2.8" />
+                      <span>{{ s.nome }}</span>
+                    </button>
+                    @if (ehAdmin()) {
+                      <button class="opcao__x" type="button" [attr.aria-label]="'Remover ' + s.nome" (click)="pedirRemocao(s.id)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                      </button>
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </section>
+        }
+
+        @for (g of grupos(); track g.categoria) {
+          <section class="grupo">
+            <h3>{{ g.categoria }}</h3>
+            <div class="catalogo">
+              @for (s of g.itens; track s.id) {
+                <button class="opcao" type="button" (click)="escolherServico(s)">
+                  <app-logo [nome]="s.nome" [icone]="s.id" [categoria]="s.categoria" [tamanho]="2.8" />
+                  <span>{{ s.nome }}</span>
+                </button>
+              }
+            </div>
+          </section>
+        } @empty {
+          @if (meusFiltrados().length === 0) {
+          <p class="sem-resultado">Nenhum serviço com esse nome. Use "Adicionar" acima para cadastrar o seu.</p>
+          }
+        }
+      </div>
+
+      <footer class="acoes">
+        <button class="cancelar" type="button" (click)="fechar.emit()">Cancelar</button>
+      </footer>
+    } @else {
+      <div class="painel__corpo">
+        <div class="servico">
+          <app-logo
+            [nome]="form.controls.nome.value"
+            [icone]="form.controls.icone.value"
+            [logo]="form.controls.logo.value"
+            [categoria]="form.controls.categoria.value"
+            [tamanho]="3"
+          />
+          <div class="servico__texto">
+            <strong>{{ form.controls.nome.value || 'Novo serviço' }}</strong>
+            <span>{{ form.controls.categoria.value }}</span>
+          </div>
+          @if (!conta()) {
+            <button class="link" type="button" (click)="trocarServico()">Trocar</button>
+          }
+        </div>
+
+        <label class="item">
+          <span>Nome</span>
+          <input type="text" formControlName="nome" placeholder="Ex.: Spotify, Internet, Aluguel" />
+          @if (form.controls.nome.touched && form.controls.nome.invalid) {
+            <small class="aviso">Informe o nome da conta.</small>
+          }
+        </label>
+
+        @if (!form.controls.icone.value) {
+          <div class="item">
+            <span>Logo (opcional)</span>
+            <div class="envio">
+              <label class="envio__botao">
+                <input class="sr" type="file" accept="image/*" (change)="escolherArquivo($event)" />
+                {{ form.controls.logo.value ? 'Trocar imagem' : 'Enviar imagem' }}
+              </label>
+              @if (form.controls.logo.value) {
+                <button class="link" type="button" (click)="removerLogo()">Remover</button>
+              }
+            </div>
+            @if (erroLogo()) {
+              <small class="aviso">{{ erroLogo() }}</small>
+            } @else {
+              <small class="dica">PNG, JPG ou WebP. A imagem é reduzida automaticamente.</small>
+            }
+          </div>
+
+          @if (!conta() && servicoSalvoId() === null && ehAdmin()) {
+            <label class="marcar">
+              <input type="checkbox" formControlName="salvarNoCatalogo" />
+              <span>Salvar na lista de serviços para usar de novo</span>
+            </label>
+          }
+        }
+
+        <div class="linha">
+          <label class="item">
+            <span>Categoria</span>
+            <select formControlName="categoria">
+              @for (c of categorias(); track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+          </label>
+
+          <label class="item">
+            <span>Valor (R$)</span>
+            <input type="number" step="0.01" min="0" formControlName="valor" />
+            @if (form.controls.valor.touched && form.controls.valor.invalid) {
+              <small class="aviso">Informe um valor maior que zero.</small>
+            }
+          </label>
+        </div>
+
+        <div class="item">
+          <span>Com que frequência?</span>
+          <div class="segmentos segmentos--ciclo">
+            @for (c of ciclos; track c) {
+              <label class="segmento">
+                <input type="radio" [value]="c" formControlName="recorrencia" />
+                <span>{{ nomesCiclo[c] }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        @if (form.controls.recorrencia.value !== 'mensal') {
+          <label class="item">
+            <span>Mês da primeira cobrança</span>
+            <select formControlName="mesInicio">
+              @for (m of meses; track m.numero) {
+                <option [ngValue]="m.numero">{{ m.nome }}</option>
+              }
+            </select>
+            <small class="dica">Cobra em: {{ previaMeses() }}</small>
+          </label>
+        }
+
+        <div class="linha">
+          <label class="item">
+            <span>Dia da cobrança</span>
+            <input type="number" min="1" max="31" formControlName="diaCobranca" />
+            @if (form.controls.diaCobranca.touched && form.controls.diaCobranca.invalid) {
+              <small class="aviso">Use um dia de 1 a 31.</small>
+            }
+          </label>
+
+          <label class="item">
+            <span>Quem paga</span>
+            <select formControlName="responsavelId">
+              @for (p of pessoas(); track p.id) {
+                <option [ngValue]="p.id">{{ p.nome }}</option>
+              }
+            </select>
+          </label>
+        </div>
+
+        <div class="item">
+          <span>Quem pode ver</span>
+          <div class="segmentos">
+            <label class="segmento">
+              <input type="radio" value="privada" formControlName="visibilidade" />
+              <span>Privada</span>
+            </label>
+            <label class="segmento">
+              <input type="radio" value="compartilhada" formControlName="visibilidade" />
+              <span>Compartilhada</span>
+            </label>
+          </div>
+          <small class="dica">Privada: só o administrador e o responsável enxergam.</small>
+        </div>
+
+        @if (!conta()) {
+          <label class="item">
+            <span>Avisar quantos dias antes?</span>
+            <input type="number" min="0" max="30" formControlName="diasAntecedencia" />
+            <small class="dica">Use 0 para não receber aviso. O aviso chega todo dia às 08:00 até o vencimento.</small>
+          </label>
+        }
+
+        @if (erro()) {
+          <div class="mensagem-erro">{{ erro() }}</div>
+        }
+      </div>
+
+      <footer class="acoes">
+        <button class="cancelar" type="button" (click)="fechar.emit()">Cancelar</button>
+        <button class="salvar" type="submit" [disabled]="enviando()">
+          {{ enviando() ? 'Salvando...' : conta() ? 'Salvar alterações' : 'Salvar conta' }}
+        </button>
+      </footer>
+    }
+  </form>
+</div>

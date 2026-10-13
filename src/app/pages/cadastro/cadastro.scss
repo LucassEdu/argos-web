@@ -1,0 +1,75 @@
+.perfis {
+  border: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  min-width: 0;
+
+  legend {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cor-texto-suave);
+    margin-bottom: 0.5rem;
+    padding: 0;
+  }
+}
+
+.perfis__opcoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.perfil {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  cursor: pointer;
+  padding: 0.9rem 1rem;
+  border-radius: var(--raio-medio);
+  background: var(--cor-campo);
+  border: 2px solid transparent;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+
+  // Esconde a bolinha padrão do radio: o cartão inteiro faz o papel dela.
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &:focus-within {
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.15);
+  }
+}
+
+.perfil--ativo {
+  border-color: var(--cor-primaria);
+  background: rgba(108, 92, 231, 0.1);
+}
+
+.perfil__titulo {
+  font-weight: 800;
+}
+
+.perfil__texto {
+  font-size: 0.8rem;
+  color: var(--cor-texto-suave);
+}
+
+.ajuda-erro {
+  color: #c9283d;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+// O botão de "Ir para o login" é um link (<a>), então precisa de alguns ajustes.
+.botao--link {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}

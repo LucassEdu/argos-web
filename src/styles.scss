@@ -1,1 +1,267 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap');
+
+/* ---------- Paleta e medidas do app (variáveis CSS) ---------- */
+:root {
+  // Cores principais: bordô negro sobre grafite
+  --cor-primaria: #5e1a1e;
+  --cor-primaria-rgb: 94, 26, 30; // mesma cor, em RGB, para fundos translúcidos
+  --cor-primaria-escura: #431215;
+  --cor-destaque: #9f3a3f;
+  --gradiente-principal: linear-gradient(135deg, #6b1d22 0%, #431215 100%);
+
+  // Fundo e superfícies (cinza-grafite quente)
+  --cor-fundo: #f5f4f2;
+  --cor-superficie: #ffffff;
+  --cor-campo: #f1efec;
+
+  // Texto
+  --cor-texto: #292524;
+  --cor-texto-suave: #78716c;
+
+  // Estados (vencimentos e feedback)
+  --cor-sucesso: #16a34a;
+  --cor-aviso: #d97706;   // amarelo queimado: perto de vencer
+  --cor-perigo: #dc2626;  // vermelho vivo: já venceu
+
+  // Cantos arredondados
+  --raio-pequeno: 12px;
+  --raio-medio: 18px;
+  --raio-grande: 28px;
+  --raio-pilula: 999px;
+
+  // Sombras suaves
+  --sombra-suave: 0 10px 30px rgba(41, 37, 36, 0.1);
+  --sombra-forte: 0 16px 40px rgba(41, 37, 36, 0.2);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Sora', 'Segoe UI', system-ui, sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Componentes reutilizáveis ---------- */
+.cartao {
+  background: var(--cor-superficie);
+  border-radius: var(--raio-grande);
+  box-shadow: var(--sombra-suave);
+  padding: 2rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--cor-texto-suave);
+  }
+
+  input,
+  select {
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--cor-texto);
+    background: var(--cor-campo);
+    border: 2px solid transparent;
+    border-radius: var(--raio-medio);
+    padding: 0.8rem 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 4px rgba(var(--cor-primaria-rgb), 0.18);
+    }
+  }
+}
+
+.botao {
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--raio-pilula);
+  padding: 0.85rem 1.6rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s, opacity 0.2s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.botao--primario {
+  background: var(--gradiente-principal);
+  color: #fff;
+  box-shadow: var(--sombra-suave);
+
+  &:hover:not(:disabled) {
+    box-shadow: var(--sombra-forte);
+  }
+}
+
+.botao--fantasma {
+  background: transparent;
+  color: var(--cor-primaria);
+}
+
+.texto-suave {
+  color: var(--cor-texto-suave);
+}
+
+.mensagem-erro {
+  background: rgba(220, 38, 38, 0.1);
+  color: #b91c1c;
+  border-radius: var(--raio-pequeno);
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.mensagem-sucesso {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+  border-radius: var(--raio-pequeno);
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+
+/* ---------- Páginas de autenticação (login e cadastro) ---------- */
+.pagina-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(107, 29, 34, 0.22), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(159, 58, 63, 0.16), transparent 45%),
+    var(--cor-fundo);
+}
+
+.caixa {
+  width: 100%;
+  max-width: 440px;
+}
+
+.marca {
+  text-align: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.marca__icone {
+  display: inline-grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 0.75rem;
+  border-radius: var(--raio-medio);
+  background: var(--gradiente-principal);
+  box-shadow: var(--sombra-suave);
+
+  img {
+    width: 60%;
+    height: auto;
+    display: block;
+  }
+}
+
+.marca__nome {
+  font-size: 1.9rem;
+  letter-spacing: -0.03em;
+}
+
+.botao--cheio {
+  width: 100%;
+}
+
+.rodape {
+  text-align: center;
+  margin: 1.25rem 0 0;
+  color: var(--cor-texto-suave);
+
+  a {
+    color: var(--cor-primaria);
+    font-weight: 800;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+/* ---------- Modo noturno ---------- */
+/* Só troca as cores-base: tudo que usa var(--...) muda sozinho. */
+html[data-tema='escuro'] {
+  color-scheme: dark; // campos, rolagem e listas nativas também escurecem
+
+  // Bordô escuro some no fundo escuro, então o "destaque" vira um tom claro.
+  --cor-primaria: #db8f92;
+  --cor-primaria-rgb: 219, 143, 146;
+  --cor-primaria-escura: #c97a7e;
+  --gradiente-principal: linear-gradient(135deg, #7a2227 0%, #4f1619 100%);
+
+  --cor-fundo: #141211;
+  --cor-superficie: #211e1c;
+  --cor-campo: #2b2725;
+
+  --cor-texto: #ede9e6;
+  --cor-texto-suave: #a8a29e;
+
+  --cor-sucesso: #22c55e;
+  --cor-aviso: #f59e0b;
+  --cor-perigo: #ef4444;
+
+  --sombra-suave: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --sombra-forte: 0 16px 40px rgba(0, 0, 0, 0.5);
+
+  .mensagem-erro {
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.14);
+  }
+
+  .mensagem-sucesso {
+    color: #86efac;
+    background: rgba(34, 197, 94, 0.14);
+  }
+}

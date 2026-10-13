@@ -1,0 +1,24 @@
+@let i = info();
+@switch (i.tipo) {
+  @case ('imagem') {
+    <span class="tile tile--imagem"><img [src]="i.src ?? ''" alt="" /></span>
+  }
+  @case ('arquivo') {
+    <span class="tile tile--imagem">
+      <img [src]="i.src ?? ''" alt="" (error)="avisarErro(i.id)" />
+    </span>
+  }
+  @case ('marca') {
+    <span class="tile tile--marca" [style.background]="i.fundo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="i.path" [attr.fill]="i.frente" /></svg>
+    </span>
+  }
+  @case ('glifo') {
+    <span class="tile tile--glifo">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path [attr.d]="i.path" /></svg>
+    </span>
+  }
+  @default {
+    <span class="tile tile--inicial" [style.background]="i.fundo" [style.color]="i.frente">{{ i.letra }}</span>
+  }
+}

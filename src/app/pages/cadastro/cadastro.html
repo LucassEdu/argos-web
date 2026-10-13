@@ -1,0 +1,98 @@
+<main class="pagina-auth">
+  <section class="cartao caixa">
+    @if (emailCadastrado(); as email) {
+      <div class="marca">
+        <span class="marca__icone">📬</span>
+        <h1>Quase lá!</h1>
+        <p class="texto-suave">Sua conta foi criada.</p>
+      </div>
+
+      <div class="mensagem-sucesso">
+        Enviamos um e-mail de confirmação para <strong>{{ email }}</strong>. Abra o link que
+        está nele para ativar a conta e depois faça login.
+      </div>
+
+      <a class="botao botao--primario botao--cheio botao--link" routerLink="/login">
+        Ir para o login
+      </a>
+    } @else {
+      <div class="marca">
+        <span class="marca__icone"><img src="argos-a.png" alt="" /></span>
+        <h1>Criar conta no Argos</h1>
+        <p class="texto-suave">Comece a organizar suas contas em poucos minutos.</p>
+      </div>
+
+      @if (erro()) {
+        <div class="mensagem-erro">{{ erro() }}</div>
+      }
+
+      <form [formGroup]="formulario" (ngSubmit)="cadastrar()">
+        <div class="campo">
+          <label for="nome">Seu nome</label>
+          <input
+            id="nome"
+            type="text"
+            formControlName="nome"
+            placeholder="Como devemos te chamar?"
+            autocomplete="name"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="voce@email.com"
+            autocomplete="email"
+          />
+          @if (formulario.controls.email.touched && formulario.controls.email.invalid) {
+            <small class="ajuda-erro">Digite um e-mail válido.</small>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <input
+            id="senha"
+            type="password"
+            formControlName="senha"
+            placeholder="Mínimo de 6 caracteres"
+            autocomplete="new-password"
+          />
+          @if (formulario.controls.senha.touched && formulario.controls.senha.invalid) {
+            <small class="ajuda-erro">A senha precisa ter pelo menos 6 caracteres.</small>
+          }
+        </div>
+
+        <fieldset class="perfis">
+          <legend>Como você vai usar?</legend>
+          <div class="perfis__opcoes">
+            <label class="perfil" [class.perfil--ativo]="formulario.controls.tipoPerfil.value === 'solo'">
+              <input type="radio" formControlName="tipoPerfil" value="solo" />
+              <span class="perfil__titulo">👤 Só eu</span>
+              <span class="perfil__texto">Perfil solo</span>
+            </label>
+
+            <label class="perfil" [class.perfil--ativo]="formulario.controls.tipoPerfil.value === 'familia'">
+              <input type="radio" formControlName="tipoPerfil" value="familia" />
+              <span class="perfil__titulo">👨‍👩‍👧 Em família</span>
+              <span class="perfil__texto">Convide quem divide as contas</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <button
+          class="botao botao--primario botao--cheio"
+          type="submit"
+          [disabled]="formulario.invalid || carregando()"
+        >
+          {{ carregando() ? 'Criando conta...' : 'Criar conta' }}
+        </button>
+      </form>
+
+      <p class="rodape">Já tem conta? <a routerLink="/login">Entrar</a></p>
+    }
+  </section>
+</main>

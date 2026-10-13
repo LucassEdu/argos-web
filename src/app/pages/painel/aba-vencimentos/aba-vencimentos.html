@@ -1,0 +1,141 @@
+@if (erro()) {
+  <div class="mensagem-erro">{{ erro() }}</div>
+}
+
+@if (carregando()) {
+  <p class="estado">Carregando suas cobranças...</p>
+} @else {
+  <section class="hero">
+    @if (totalPendente() > 0) {
+      <p class="hero__rotulo">Falta pagar</p>
+      <p class="hero__valor"><span class="hero__moeda">R$</span>{{ valorGrande() }}</p>
+    } @else {
+      <p class="hero__rotulo">Cobranças pendentes</p>
+      <p class="hero__valor hero__valor--ok">Tudo em dia</p>
+    }
+
+    <ul class="status">
+      @if (qtdVencidas() > 0) {
+        <li class="status__item status__item--vencida">
+          <i></i>{{ qtdVencidas() }} {{ qtdVencidas() === 1 ? 'atrasada' : 'atrasadas' }}
+        </li>
+      }
+      @if (qtdProximas() > 0) {
+        <li class="status__item status__item--proxima">
+          <i></i>{{ qtdProximas() }} {{ qtdProximas() === 1 ? 'vence em breve' : 'vencem em breve' }}
+        </li>
+      }
+      @if (qtdPagas() > 0) {
+        <li class="status__item status__item--paga">
+          <i></i>{{ qtdPagas() }} {{ qtdPagas() === 1 ? 'paga neste mês' : 'pagas neste mês' }}
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="regua" aria-label="Linha do tempo dos próximos 30 dias">
+    <div class="regua__rolagem">
+      <div class="regua__quadro" [style.--hoje]="regua().hojePos + '%'">
+        <div class="regua__trilho"></div>
+
+        <div class="hoje" [style.left.%]="regua().hojePos">
+          <span class="hoje__pilula">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Hoje
+          </span>
+        </div>
+
+        <ul class="regua__pontos">
+          @for (m of regua().marcadores; track m.id) {
+            <li
+              class="ponto ponto--{{ m.situacao }}"
+              [class.ponto--multiplo]="m.qtd > 1"
+              [style.left.%]="m.pos"
+              [attr.title]="m.titulo"
+            >
+              <span class="ponto__bolinha">{{ m.qtd > 1 ? m.qtd : '' }}</span>
+              <span class="ponto__rotulo ponto__rotulo--{{ m.nivel }}">
+                <strong>{{ m.nome }}</strong>
+                <small>{{ m.data }}</small>
+              </span>
+            </li>
+          }
+        </ul>
+
+        <ul class="regua__eixo" aria-hidden="true">
+          @for (marca of regua().marcas; track marca.rotulo) {
+            <li [style.left.%]="marca.pos">{{ marca.rotulo }}</li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    @if (regua().marcadores.length === 0) {
+      <p class="regua__vazio">Nenhum vencimento nos próximos 30 dias.</p>
+    }
+  </section>
+
+  @if (grupos().length === 0) {
+    <div class="vazio">
+      <h2>Nenhuma cobrança por aqui</h2>
+      <p>As cobranças mensais das suas contas ativas aparecem nesta tela automaticamente.</p>
+    </div>
+  } @else {
+    @for (g of grupos(); track g.id) {
+      <div class="grupo__cabeca">
+        <span class="grupo__ponto grupo__ponto--{{ g.classe }}"></span>
+        <h3>{{ g.titulo }}</h3>
+        <span class="grupo__qtd">{{ g.itens.length }}</span>
+        <span class="grupo__total">{{ moeda(g.total) }}</span>
+      </div>
+
+      <ul class="lista">
+        @for (p of g.itens; track p.id) {
+          <li
+            class="linha linha--{{ g.classe }}"
+            [class.linha--recente]="recenteId() === p.id"
+          >
+            <div class="linha__data">
+              <strong>{{ dia(p.dataVencimento) }}</strong>
+              <small>{{ mes(p.dataVencimento) }}</small>
+            </div>
+
+            <div class="linha__info">
+              <span class="linha__nome">{{ p.assinaturaNome }}</span>
+              <small class="linha__meta">
+                <span class="linha__prazo">{{ prazo(p) }}</span>
+                <span class="linha__resp">{{ p.responsavelNome }}</span>
+              </small>
+            </div>
+
+            <strong class="linha__valor">{{ moeda(p.valor) }}</strong>
+
+            @if (p.status === 'pago') {
+              <button
+                type="button"
+                class="acao acao--desfazer"
+                [disabled]="ocupadoId() !== null"
+                (click)="alternar(p)"
+              >
+                Ainda não paguei
+              </button>
+            } @else {
+              <button
+                type="button"
+                class="acao"
+                [disabled]="ocupadoId() !== null"
+                (click)="alternar(p)"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+                Já paguei
+              </button>
+            }
+          </li>
+        }
+      </ul>
+    }
+  }
+}

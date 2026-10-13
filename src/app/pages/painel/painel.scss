@@ -1,0 +1,261 @@
+:host {
+  display: block;
+  --faixa: #5e1a1e; // bordô negro da marca
+}
+
+// No modo noturno a faixa fica mais escura, para não ofuscar.
+:host-context([data-tema='escuro']) {
+  --faixa: #3b1519;
+}
+
+.interno {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ---------- Faixa de topo ---------- */
+.faixa {
+  background: var(--faixa);
+  color: #fff;
+  padding: 0.9rem 0 1.5rem;
+}
+
+.faixa__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+
+  img {
+    width: 28px;
+    height: auto;
+    display: block;
+  }
+}
+
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.icone-botao {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.avatar {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--faixa);
+  background: #fff;
+  border: 0;
+  border-radius: 28%;
+  padding: 0;
+  font-family: inherit;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.sair {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 2.6rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--raio-pilula);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.faixa__saudacao {
+  margin-top: 1.1rem;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    line-height: 1.15;
+  }
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.92rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+}
+
+.separador {
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+/* ---------- Abas ---------- */
+.miolo {
+  padding-bottom: 3rem;
+}
+
+.abas {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.75rem;
+  overflow-x: auto;
+  border-bottom: 1px solid color-mix(in srgb, var(--cor-texto) 12%, transparent);
+}
+
+.aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.1rem;
+  margin-bottom: -1px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--cor-texto-suave);
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+
+  svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  &:hover {
+    color: var(--cor-texto);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cor-primaria);
+    outline-offset: -2px;
+    border-radius: var(--raio-pequeno);
+  }
+}
+
+.aba--ativa {
+  color: var(--cor-primaria);
+  border-bottom-color: var(--cor-primaria);
+
+  &:hover {
+    color: var(--cor-primaria);
+  }
+}
+
+.aba__curto {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .interno {
+    padding: 0 1rem;
+  }
+
+  .aba {
+    gap: 0.4rem;
+    padding: 0.9rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .aba__longo {
+    display: none;
+  }
+
+  .aba__curto {
+    display: inline;
+  }
+
+  .sair span,
+  .avatar {
+    display: none;
+  }
+
+  .sair {
+    padding: 0;
+    width: 2.6rem;
+    justify-content: center;
+  }
+}

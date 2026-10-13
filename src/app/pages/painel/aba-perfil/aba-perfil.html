@@ -1,0 +1,141 @@
+<section class="cartao-perfil">
+  <div class="foto">
+    @if (me()?.foto; as foto) {
+      <img class="foto__img" [src]="foto" alt="Sua foto de perfil" />
+    } @else {
+      <span class="foto__iniciais" aria-hidden="true">{{ iniciais() }}</span>
+    }
+    @if (enviandoFoto()) {
+      <span class="foto__carregando">...</span>
+    }
+  </div>
+
+  <div class="cartao-perfil__texto">
+    <h2>{{ me()?.nome }}</h2>
+    <p>{{ me()?.email }}</p>
+    <div class="selos">
+      <span class="selo">{{ auth.ehAdmin() ? 'Administrador' : 'Membro' }}</span>
+      <span class="selo">{{ me()?.workspaceNome }}</span>
+      <span class="selo">{{ me()?.tipoPerfil === 'familia' ? 'Família' : 'Individual' }}</span>
+    </div>
+  </div>
+
+  <div class="cartao-perfil__acoes">
+    <label class="botao-foto" [class.botao-foto--ocupado]="enviandoFoto()">
+      <input class="sr" type="file" accept="image/*" (change)="escolherFoto($event)" />
+      {{ me()?.foto ? 'Trocar foto' : 'Enviar foto' }}
+    </label>
+    @if (me()?.foto) {
+      <button class="botao-link" type="button" [disabled]="enviandoFoto()" (click)="removerFoto()">Remover</button>
+    }
+  </div>
+</section>
+
+@if (erroFoto()) {
+  <div class="mensagem-erro">{{ erroFoto() }}</div>
+}
+
+<section class="resumo">
+  <div class="numero">
+    <span>Suas contas</span>
+    <strong>{{ minhas().length }}</strong>
+  </div>
+  <div class="numero">
+    <span>Ativas</span>
+    <strong>{{ ativas().length }}</strong>
+  </div>
+  <div class="numero">
+    <span>Gasto fixo por mês</span>
+    <strong>{{ moeda(gastoMensal()) }}</strong>
+  </div>
+</section>
+
+<div class="colunas">
+  <form class="bloco" [formGroup]="formDados" (ngSubmit)="salvarDados()">
+    <h3>Seus dados</h3>
+
+    <label class="item">
+      <span>Nome</span>
+      <input type="text" formControlName="nome" autocomplete="name" />
+      @if (formDados.controls.nome.touched && formDados.controls.nome.invalid) {
+        <small class="aviso">Informe seu nome (até 80 caracteres).</small>
+      }
+    </label>
+
+    <label class="item">
+      <span>E-mail</span>
+      <input type="email" [value]="me()?.email ?? ''" disabled />
+      <small class="dica">O e-mail é o seu acesso e não pode ser alterado aqui.</small>
+    </label>
+
+    <label class="item">
+      <span>Aviso padrão (dias antes do vencimento)</span>
+      <input type="number" min="0" max="30" formControlName="diasAvisoPadrao" />
+      <small class="dica">Vem preenchido ao cadastrar uma conta nova. Use 0 para não receber aviso.</small>
+      @if (formDados.controls.diasAvisoPadrao.touched && formDados.controls.diasAvisoPadrao.invalid) {
+        <small class="aviso">Use um número de 0 a 30.</small>
+      }
+    </label>
+
+    @if (erroDados()) {
+      <div class="mensagem-erro">{{ erroDados() }}</div>
+    }
+    @if (okDados()) {
+      <div class="ok">Dados salvos.</div>
+    }
+
+    <button class="salvar" type="submit" [disabled]="salvando()">
+      {{ salvando() ? 'Salvando...' : 'Salvar alterações' }}
+    </button>
+  </form>
+
+  <div class="coluna">
+    <section class="bloco">
+      <h3>Aparência</h3>
+      <div class="segmentos">
+        <label class="segmento">
+          <input type="radio" name="tema" [checked]="!tema.escuro()" (change)="tema.escuro.set(false)" />
+          <span>Claro</span>
+        </label>
+        <label class="segmento">
+          <input type="radio" name="tema" [checked]="tema.escuro()" (change)="tema.escuro.set(true)" />
+          <span>Escuro</span>
+        </label>
+      </div>
+      <small class="dica">A escolha fica salva neste navegador.</small>
+    </section>
+
+    <form class="bloco" [formGroup]="formSenha" (ngSubmit)="trocarSenha()">
+      <h3>Trocar senha</h3>
+
+      <label class="item">
+        <span>Senha atual</span>
+        <input type="password" formControlName="senhaAtual" autocomplete="current-password" />
+      </label>
+
+      <label class="item">
+        <span>Nova senha</span>
+        <input type="password" formControlName="novaSenha" autocomplete="new-password" />
+        @if (formSenha.controls.novaSenha.touched && formSenha.controls.novaSenha.invalid) {
+          <small class="aviso">A nova senha precisa ter pelo menos 6 caracteres.</small>
+        }
+      </label>
+
+      <label class="item">
+        <span>Repita a nova senha</span>
+        <input type="password" formControlName="confirmar" autocomplete="new-password" />
+      </label>
+
+      @if (erroSenha()) {
+        <div class="mensagem-erro">{{ erroSenha() }}</div>
+      }
+      @if (okSenha()) {
+        <div class="ok">Senha alterada. Use a nova no próximo acesso.</div>
+      }
+
+      <button class="salvar" type="submit" [disabled]="trocandoSenha()">
+        {{ trocandoSenha() ? 'Alterando...' : 'Alterar senha' }}
+      </button>
+    </form>
+  </div>
+</div>

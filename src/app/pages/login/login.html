@@ -1,0 +1,47 @@
+<main class="pagina-auth">
+  <section class="cartao caixa">
+    <div class="marca">
+      <span class="marca__icone"><img src="argos-a.png" alt="" /></span>
+      <h1 class="marca__nome">Argos</h1>
+      <p class="texto-suave">Nunca mais seja pego de surpresa por uma cobrança.</p>
+    </div>
+
+    @if (erro()) {
+      <div class="mensagem-erro">{{ erro() }}</div>
+    }
+
+    <form [formGroup]="formulario" (ngSubmit)="entrar()">
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="voce@email.com"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input
+          id="senha"
+          type="password"
+          formControlName="senha"
+          placeholder="Sua senha"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button
+        class="botao botao--primario botao--cheio"
+        type="submit"
+        [disabled]="formulario.invalid || carregando()"
+      >
+        {{ carregando() ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <p class="rodape">Ainda não tem conta? <a routerLink="/cadastro">Criar conta</a></p>
+  </section>
+</main>

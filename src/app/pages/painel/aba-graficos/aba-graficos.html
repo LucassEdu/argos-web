@@ -1,0 +1,68 @@
+<div class="topo">
+  <h2 class="topo__titulo">Gráficos</h2>
+</div>
+
+@if (erro()) {
+  <div class="mensagem-erro">{{ erro() }}</div>
+  <button class="botao botao--primario" type="button" (click)="carregar()">Tentar de novo</button>
+} @else if (carregando()) {
+  <div class="cartao estado">Montando seus gráficos...</div>
+} @else {
+  <section class="resumo">
+    <div class="resumo__item">
+      <span class="resumo__rotulo">Gasto fixo por mês</span>
+      <strong class="resumo__valor">{{ moeda(totalMensal()) }}</strong>
+      <small class="texto-suave">só contas ativas</small>
+    </div>
+
+    <div class="resumo__item">
+      <span class="resumo__rotulo">Categoria que mais pesa</span>
+      <strong class="resumo__valor resumo__valor--texto">
+        {{ maiorCategoria()?.categoria ?? '—' }}
+      </strong>
+      <small class="texto-suave">
+        {{ maiorCategoria() ? moeda(maiorCategoria()!.total) + ' por mês' : 'sem contas ativas' }}
+      </small>
+    </div>
+
+    <div class="resumo__item">
+      <span class="resumo__rotulo">Já pago neste mês</span>
+      <strong class="resumo__valor">{{ moeda(totalPagoNoMes()) }}</strong>
+      <small class="texto-suave">cobranças marcadas como pagas</small>
+    </div>
+  </section>
+
+  <div class="paineis">
+    <section class="grafico">
+      <h3>Gasto mensal por categoria</h3>
+
+      @if (porCategoria().length === 0) {
+        <p class="texto-suave vazio">Cadastre contas ativas para ver este gráfico.</p>
+      } @else {
+        <div class="grafico__corpo">
+          <div class="grafico__area grafico__area--rosca">
+            <canvas #rosca aria-label="Gasto mensal por categoria"></canvas>
+          </div>
+
+          <ul class="legenda">
+            @for (c of porCategoria(); track c.categoria; let i = $index) {
+              <li>
+                <span class="legenda__cor" [style.background]="cor(i)"></span>
+                <span class="legenda__nome">{{ c.categoria }}</span>
+                <span class="legenda__valor">{{ moeda(c.total) }}</span>
+                <small class="legenda__pct">{{ percentual(c.total) }}</small>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </section>
+
+    <section class="grafico">
+      <h3>Pagamentos nos últimos 6 meses</h3>
+      <div class="grafico__area">
+        <canvas #barras aria-label="Total pago e pendente por mês"></canvas>
+      </div>
+    </section>
+  </div>
+}

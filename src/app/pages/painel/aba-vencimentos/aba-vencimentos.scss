@@ -1,0 +1,494 @@
+:host {
+  display: block;
+  // Cor fina de contorno, igual nos dois temas.
+  --linha: color-mix(in srgb, var(--cor-texto) 12%, transparent);
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.estado {
+  padding: 3rem 0;
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- Destaque: quanto falta pagar ---------- */
+.hero {
+  margin-bottom: 1.75rem;
+}
+
+.hero__rotulo {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+}
+
+.hero__valor {
+  margin: 0.15rem 0 0;
+  font-size: clamp(2.6rem, 8vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero__moeda {
+  margin-right: 0.45rem;
+  font-size: 0.42em;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--cor-texto-suave);
+}
+
+.hero__valor--ok {
+  color: var(--cor-sucesso);
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.4rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.status__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  i {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--cor-primaria);
+  }
+}
+
+.status__item--vencida i { background: var(--cor-perigo); }
+.status__item--proxima i { background: var(--cor-aviso); }
+.status__item--paga i { background: var(--cor-sucesso); }
+
+/* ---------- Régua do mês ---------- */
+.regua {
+  margin-bottom: 2.25rem;
+  background: var(--cor-superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-medio);
+}
+
+.regua__rolagem {
+  overflow-x: auto;
+  padding: 0.5rem 0 0.25rem;
+}
+
+// 170px: 28px de "Hoje" + 120px de pontos e rótulos + 22px de datas.
+.regua__quadro {
+  position: relative;
+  height: 170px;
+  min-width: 700px;
+  margin: 0 3.5rem;
+}
+
+.regua__trilho {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 85px;
+  height: 6px;
+  border-radius: 999px;
+  // Parte vermelha = o que ficou para trás; neutra = o que ainda vem.
+  background: linear-gradient(
+    to right,
+    rgba(220, 38, 38, 0.4) var(--hoje),
+    var(--cor-campo) var(--hoje)
+  );
+}
+
+.hoje {
+  position: absolute;
+  top: 28px;
+  bottom: 22px;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--cor-primaria);
+  // Único movimento da tela: o marcador desliza até o dia de hoje.
+  animation: chegar 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes chegar {
+  from {
+    left: 0;
+  }
+}
+
+.hoje__pilula {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--gradiente-principal);
+  border-radius: 999px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+
+  svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+}
+
+.regua__pontos {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Cada ponto é uma âncora de tamanho zero, alinhada ao centro do trilho.
+.ponto {
+  position: absolute;
+  top: 88px;
+  width: 0;
+  height: 0;
+}
+
+.ponto__bolinha {
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 3px solid var(--cor-superficie);
+  border-radius: 50%;
+  background: var(--cor-primaria);
+}
+
+.ponto--multiplo .ponto__bolinha {
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.ponto--multiplo .ponto__rotulo--0 { bottom: 20px; }
+.ponto--multiplo .ponto__rotulo--1 { top: 20px; }
+
+.ponto--vencida .ponto__bolinha { background: var(--cor-perigo); }
+.ponto--proxima .ponto__bolinha { background: var(--cor-aviso); }
+.ponto--em_dia .ponto__bolinha { background: var(--cor-texto-suave); }
+.ponto--paga .ponto__bolinha { background: var(--cor-sucesso); }
+.ponto--paga .ponto__rotulo { opacity: 0.6; }
+
+.ponto__rotulo {
+  position: absolute;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 120px;
+  padding: 0 0.3rem;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  // Fundo igual ao do painel: a linha de "Hoje" não risca o nome da conta.
+  background: var(--cor-superficie);
+  border-radius: 6px;
+
+  strong {
+    max-width: 120px;
+    overflow: hidden;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+  }
+
+  small {
+    font-size: 0.74rem;
+    color: var(--cor-texto-suave);
+  }
+}
+
+.ponto__rotulo--0 { bottom: 16px; }
+.ponto__rotulo--1 { top: 16px; }
+
+.regua__eixo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.74rem;
+  color: var(--cor-texto-suave);
+
+  li {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+}
+
+.regua__vazio {
+  margin: 0;
+  padding: 0 1rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- Grupos e linhas ---------- */
+.grupo__cabeca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.75rem 0 0.6rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.grupo__ponto {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: var(--cor-texto-suave);
+}
+
+.grupo__ponto--vencida { background: var(--cor-perigo); }
+.grupo__ponto--proxima { background: var(--cor-aviso); }
+.grupo__ponto--paga { background: var(--cor-sucesso); }
+
+.grupo__qtd {
+  min-width: 1.4rem;
+  padding: 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  text-align: center;
+  color: var(--cor-texto-suave);
+  background: var(--cor-campo);
+  border-radius: 999px;
+}
+
+.grupo__total {
+  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto-suave);
+}
+
+// A lista é uma peça só, com linhas separadas por filetes (não são cartões soltos).
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  background: var(--cor-superficie);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-medio);
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.1rem 0.85rem 1rem;
+  border-bottom: 1px solid var(--linha);
+  box-shadow: inset 4px 0 0 var(--cor-texto-suave);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.linha--vencida { box-shadow: inset 4px 0 0 var(--cor-perigo); }
+.linha--proxima { box-shadow: inset 4px 0 0 var(--cor-aviso); }
+.linha--paga { box-shadow: inset 4px 0 0 var(--cor-sucesso); }
+.linha--paga .linha__nome,
+.linha--paga .linha__valor { color: var(--cor-texto-suave); }
+
+// Ao marcar como paga, a linha pisca de verde uma vez.
+.linha--recente {
+  animation: confirmou 1.6s ease-out;
+}
+
+@keyframes confirmou {
+  from {
+    background: color-mix(in srgb, var(--cor-sucesso) 22%, transparent);
+  }
+}
+
+.linha__data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+
+  strong {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  small {
+    font-size: 0.74rem;
+    color: var(--cor-texto-suave);
+  }
+}
+
+.linha__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.linha__nome {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.linha__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+  font-size: 0.82rem;
+  color: var(--cor-texto-suave);
+}
+
+.linha--vencida .linha__prazo {
+  font-weight: 600;
+  color: var(--cor-perigo);
+}
+
+.linha--proxima .linha__prazo {
+  font-weight: 600;
+  color: var(--cor-aviso);
+}
+
+.linha__valor {
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.acao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 9.5rem;
+  padding: 0.55rem 1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--gradiente-principal);
+  border: 1px solid transparent;
+  border-radius: var(--raio-pilula);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s, background 0.15s;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cor-primaria);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+}
+
+.acao--desfazer {
+  color: var(--cor-texto-suave);
+  background: transparent;
+  border-color: var(--linha);
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+    color: var(--cor-texto);
+    background: var(--cor-campo);
+  }
+}
+
+.vazio {
+  padding: 2rem 0;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 0.4rem;
+    font-size: 1.15rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--cor-texto-suave);
+  }
+}
+
+/* ---------- Celular ---------- */
+@media (max-width: 640px) {
+  .linha {
+    grid-template-columns: 3rem 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .acao {
+    grid-column: 1 / -1;
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hoje,
+  .linha--recente {
+    animation: none;
+  }
+}
