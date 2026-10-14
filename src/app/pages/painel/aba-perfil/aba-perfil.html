@@ -90,21 +90,6 @@
   </form>
 
   <div class="coluna">
-    <section class="bloco">
-      <h3>Aparência</h3>
-      <div class="segmentos">
-        <label class="segmento">
-          <input type="radio" name="tema" [checked]="!tema.escuro()" (change)="tema.escuro.set(false)" />
-          <span>Claro</span>
-        </label>
-        <label class="segmento">
-          <input type="radio" name="tema" [checked]="tema.escuro()" (change)="tema.escuro.set(true)" />
-          <span>Escuro</span>
-        </label>
-      </div>
-      <small class="dica">A escolha fica salva neste navegador.</small>
-    </section>
-
     <form class="bloco" [formGroup]="formSenha" (ngSubmit)="trocarSenha()">
       <h3>Trocar senha</h3>
 

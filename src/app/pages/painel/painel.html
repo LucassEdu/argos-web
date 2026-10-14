@@ -1,13 +1,33 @@
 <div class="painel">
   <header class="faixa">
+    <img class="faixa__marca" src="argos-a.png" alt="" aria-hidden="true" />
+
     <div class="interno">
       <div class="faixa__topo">
         <div class="marca">
           <img src="argos-a.png" alt="" />
           <span>Argos</span>
+          <i class="marca__ponto" aria-hidden="true"></i>
+          <small class="marca__lema">Seus vencimentos sob controle</small>
         </div>
 
         <div class="acoes">
+          <button
+            class="icone-botao"
+            type="button"
+            [class.icone-botao--ativo]="abaAtiva() === 'suporte'"
+            title="Suporte"
+            aria-label="Abrir suporte"
+            (click)="selecionar('suporte')"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+              <rect x="2.5" y="13" width="4.5" height="7" rx="2" />
+              <rect x="17" y="13" width="4.5" height="7" rx="2" />
+              <path d="M19.25 20c0 1.5-1.5 2-4 2h-2" />
+            </svg>
+          </button>
+
           <button
             class="icone-botao"
             type="button"
@@ -51,13 +71,16 @@
         </div>
       </div>
 
-      <div class="faixa__saudacao">
-        <h1>{{ saudacao() }}, {{ primeiroNome() }}</h1>
-        <p>
-          {{ auth.usuario()?.workspaceNome }}
-          <span class="separador" aria-hidden="true"></span>
-          {{ auth.ehAdmin() ? 'Administrador' : 'Membro' }}
-        </p>
+      <div class="faixa__corpo">
+        <div class="faixa__saudacao">
+          <h1>{{ saudacao() }}, {{ primeiroNome() }}</h1>
+          <div class="selos">
+            <span class="selo">{{ auth.usuario()?.workspaceNome }}</span>
+            <span class="selo">{{ auth.ehAdmin() ? 'Administrador' : 'Membro' }}</span>
+          </div>
+        </div>
+
+        <app-ticker [gatilho]="abaAtiva()" />
       </div>
     </div>
   </header>
@@ -112,7 +135,12 @@
         @case ('perfil') {
           <app-aba-perfil />
         }
+        @case ('suporte') {
+          <app-aba-suporte />
+        }
       }
     </section>
   </div>
 </div>
+
+<app-avisos />

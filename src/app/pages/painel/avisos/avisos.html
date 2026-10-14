@@ -1,0 +1,25 @@
+<div class="avisos" role="status" aria-live="polite">
+  @for (a of avisos.lista(); track a.id) {
+    <div class="aviso aviso--{{ a.tipo }}">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        @switch (a.tipo) {
+          @case ('sucesso') {
+            <path d="M20 6 9 17l-5-5" />
+          }
+          @case ('erro') {
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 8v5M12 16.5v.5" />
+          }
+          @default {
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 11v5M12 7.5v.5" />
+          }
+        }
+      </svg>
+      <span class="aviso__texto">{{ a.texto }}</span>
+      <button class="aviso__fechar" type="button" aria-label="Fechar aviso" (click)="avisos.fechar(a.id)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
+  }
+</div>

@@ -4,6 +4,7 @@ import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { mensagemDeErro } from '../../../core/erros';
 import { formatarMoeda } from '../../../core/formatos';
 import { Assinaturas } from '../../../core/assinaturas';
+import { Avisos } from '../../../core/avisos';
 import { AssinaturaResponse, PagamentoResponse, SituacaoPagamento } from '../../../core/models';
 import { Pagamentos } from '../../../core/pagamentos';
 import { Logo } from '../logo/logo';
@@ -50,6 +51,7 @@ const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'o
 export class AbaVencimentos implements OnInit {
   private readonly api = inject(Pagamentos);
   private readonly apiContas = inject(Assinaturas);
+  private readonly avisos = inject(Avisos);
 
   protected readonly pagamentos = signal<PagamentoResponse[]>([]);
   // Contas por id, só para pegar a logo de cada cobrança (o backend não repete a imagem em cada linha).
@@ -195,6 +197,10 @@ export class AbaVencimentos implements OnInit {
       next: (atualizado) => {
         this.pagamentos.update((l) => l.map((x) => (x.id === atualizado.id ? atualizado : x)));
         this.ocupadoId.set(null);
+
+        this.avisos.sucesso(
+          novo === 'pago' ? `${p.assinaturaNome} marcada como paga.` : 'A cobrança voltou para pendente.',
+        );
 
         if (novo === 'pago') {
           this.recenteId.set(atualizado.id);

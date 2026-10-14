@@ -1,0 +1,146 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.ticker {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.ticker__rotulo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #6fd49a;
+  }
+}
+
+// A "janela" corta o que passa das bordas e esmaece as pontas.
+.ticker__janela {
+  flex: 1;
+  min-width: 0;
+  height: 2.7rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+.ticker__trilho {
+  display: flex;
+  width: max-content;
+  animation: rolar linear infinite;
+}
+
+.ticker--pausado .ticker__trilho,
+.ticker__janela:hover .ticker__trilho {
+  animation-play-state: paused;
+}
+
+// A lista aparece duas vezes: andar metade da largura volta ao ponto de partida.
+@keyframes rolar {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 1.3rem;
+  font-size: 0.86rem;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+
+  b {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  strong {
+    font-weight: 700;
+    color: #fff;
+  }
+}
+
+.tom-neutro {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tom-ok {
+  color: #6fd49a;
+}
+
+.tom-aviso {
+  color: #f0bd6a;
+}
+
+.tom-perigo {
+  color: #ff8a8a;
+}
+
+.ticker__pausa {
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.13);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.24);
+  }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@media (max-width: 900px) {
+  .ticker__rotulo {
+    display: none;
+  }
+}
+
+// Quem pediu menos movimento no sistema não vê a rolagem.
+@media (prefers-reduced-motion: reduce) {
+  .ticker__trilho {
+    animation: none;
+  }
+
+  .ticker__janela {
+    overflow-x: auto;
+  }
+}

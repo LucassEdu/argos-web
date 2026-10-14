@@ -4,14 +4,14 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 
 import { Assinaturas } from '../../../core/assinaturas';
 import { Auth } from '../../../core/auth';
+import { Avisos } from '../../../core/avisos';
 import { mensagemDeErro } from '../../../core/erros';
 import { formatarMoeda } from '../../../core/formatos';
 import { reduzirParaQuadrado } from '../../../core/imagem';
 import { AssinaturaResponse, INTERVALO_MESES } from '../../../core/models';
 import { Perfil } from '../../../core/perfil';
-import { Tema } from '../../../core/tema';
 
-// Aba "Perfil": foto, dados pessoais, resumo das contas, aparência e senha.
+// Aba "Perfil": foto, dados pessoais, resumo das contas e senha.
 @Component({
   selector: 'app-aba-perfil',
   imports: [ReactiveFormsModule],
@@ -22,8 +22,8 @@ export class AbaPerfil implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly perfilApi = inject(Perfil);
   private readonly assinaturasApi = inject(Assinaturas);
+  private readonly avisos = inject(Avisos);
   protected readonly auth = inject(Auth);
-  protected readonly tema = inject(Tema);
 
   protected readonly me = this.auth.usuario;
   protected readonly assinaturas = signal<AssinaturaResponse[]>([]);
@@ -134,7 +134,10 @@ export class AbaPerfil implements OnInit {
 
   private gravarFoto(foto: string): void {
     this.perfilApi.atualizar({ foto }).subscribe({
-      next: () => this.enviandoFoto.set(false),
+      next: () => {
+        this.enviandoFoto.set(false);
+        this.avisos.sucesso(foto ? 'Foto atualizada.' : 'Foto removida.');
+      },
       error: (e: HttpErrorResponse) => {
         this.erroFoto.set(mensagemDeErro(e));
         this.enviandoFoto.set(false);

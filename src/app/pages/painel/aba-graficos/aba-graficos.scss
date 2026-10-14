@@ -125,3 +125,23 @@
   text-align: right;
   color: var(--cor-texto-suave);
 }
+
+/* ---------- Gráfico de barras acompanha a altura do gráfico ao lado ---------- */
+// Os dois cartões têm a mesma altura. Quando a rosca ganha mais categorias e fica alta,
+// o gráfico de barras cresce junto, em vez de deixar um vazio embaixo dele.
+.paineis > .grafico:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.paineis > .grafico:last-child .grafico__area {
+  flex: 1;
+  height: auto;
+  min-height: 280px;
+}
+
+// O canvas fica solto dentro da área, sem "empurrar" a altura dela (evita crescer sem parar).
+.paineis > .grafico:last-child .grafico__area canvas {
+  position: absolute;
+  inset: 0;
+}

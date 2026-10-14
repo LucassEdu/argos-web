@@ -1,0 +1,237 @@
+.topo {
+  margin-bottom: 1.25rem;
+}
+
+.topo__titulo {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.topo__sub {
+  margin: 0.2rem 0 0;
+}
+
+.colunas {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bloco {
+  padding: 1.4rem 1.5rem;
+  background: var(--cor-superficie);
+  border-radius: var(--raio-grande);
+  box-shadow: var(--sombra-suave);
+
+  h3 {
+    margin: 0 0 0.85rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    line-height: 1.55;
+  }
+}
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Busca ---------- */
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  margin-bottom: 0.9rem;
+  color: var(--cor-texto-suave);
+  background: var(--cor-campo, rgba(127, 127, 127, 0.12));
+  border-radius: 999px;
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex: none;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.8rem 0;
+    font: inherit;
+    color: var(--cor-texto);
+    background: transparent;
+    border: 0;
+    outline: none;
+  }
+}
+
+.vazio {
+  padding: 1.25rem 0 0.25rem;
+  text-align: center;
+}
+
+/* ---------- Perguntas ---------- */
+.lista {
+  display: flex;
+  flex-direction: column;
+}
+
+.pergunta {
+  border-top: 1px solid color-mix(in srgb, var(--cor-texto) 10%, transparent);
+
+  &:first-child {
+    border-top: 0;
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 0;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex: none;
+      color: var(--cor-texto-suave);
+      transition: transform 0.2s;
+    }
+
+    &:hover {
+      color: var(--cor-primaria);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--cor-primaria);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: var(--cor-texto-suave);
+  }
+
+  &[open] summary svg {
+    transform: rotate(180deg);
+  }
+}
+
+/* ---------- Contato ---------- */
+.bloco--contato {
+  color: #fff;
+  background: var(--gradiente-principal);
+  box-shadow: 0 18px 32px -18px rgba(var(--cor-primaria-rgb), 0.7);
+
+  .texto-suave {
+    color: rgba(255, 255, 255, 0.78);
+  }
+}
+
+.email {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  word-break: break-all;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    flex: none;
+  }
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.botao-contato,
+.botao-sec {
+  padding: 0.7rem 1.2rem;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.botao-contato {
+  color: var(--cor-primaria);
+  background: #fff;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.88);
+  }
+}
+
+.botao-sec {
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+.dica {
+  display: block;
+  margin-top: 0.9rem;
+  line-height: 1.45;
+}
+
+/* ---------- Sobre ---------- */
+.tecnologias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+
+  span {
+    padding: 0.28rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: color-mix(in srgb, var(--cor-texto) 8%, transparent);
+    border-radius: 999px;
+  }
+}
+
+@media (max-width: 860px) {
+  .colunas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

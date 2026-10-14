@@ -243,14 +243,15 @@
 /* ---------- Ações discretas ---------- */
 .conta__acoes {
   display: flex;
-  gap: 0.25rem;
+  flex-wrap: wrap;
+  gap: 0.1rem;
   margin-top: auto;
   padding-top: 0.7rem;
   border-top: 1px solid var(--linha);
 }
 
 .acao {
-  padding: 0.35rem 0.7rem;
+  padding: 0.35rem 0.5rem;
   font: inherit;
   font-size: 0.82rem;
   font-weight: 600;
@@ -521,4 +522,123 @@
   .confirma__caixa {
     animation: none;
   }
+}
+
+/* ---------- Busca e filtros ---------- */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+}
+
+.busca {
+  position: relative;
+  flex: 1 1 13rem;
+  min-width: 11rem;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 0.9rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--cor-texto-suave);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.9rem 0.6rem 2.5rem;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--cor-texto);
+    background: var(--cor-campo);
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    &::placeholder {
+      color: var(--cor-texto-suave);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+    }
+  }
+}
+
+.chips {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  background: var(--cor-campo);
+  border-radius: 999px;
+}
+
+.chip {
+  padding: 0.38rem 0.85rem;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover:not(.chip--ativo) {
+    color: var(--cor-texto);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--cor-primaria);
+  }
+}
+
+.chip--ativo {
+  color: #fff;
+  background: var(--gradiente-principal);
+}
+
+.seletor {
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--cor-texto);
+  background: var(--cor-campo);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+  }
+}
+
+.limpar {
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--cor-primaria);
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(var(--cor-primaria-rgb), 0.1);
+  }
+}
+
+.contagem {
+  margin: -0.4rem 0 0.9rem;
+  font-size: 0.84rem;
+  color: var(--cor-texto-suave);
 }

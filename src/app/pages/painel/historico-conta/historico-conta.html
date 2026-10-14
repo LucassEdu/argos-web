@@ -1,0 +1,62 @@
+<div class="fundo" (click)="fechar.emit()">
+  <section
+    class="janela"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Histórico de pagamentos"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="janela__topo">
+      <app-logo
+        [nome]="conta().nome"
+        [icone]="conta().icone"
+        [logo]="conta().logo"
+        [categoria]="conta().categoria"
+        [tamanho]="2.6"
+      />
+      <div class="janela__titulo">
+        <h2>{{ conta().nome }}</h2>
+        <p>Histórico de pagamentos</p>
+      </div>
+      <button class="janela__fechar" type="button" aria-label="Fechar" (click)="fechar.emit()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </header>
+
+    @if (carregando()) {
+      <p class="estado">Carregando...</p>
+    } @else if (erro()) {
+      <div class="mensagem-erro">{{ erro() }}</div>
+    } @else if (itens().length === 0) {
+      <div class="estado">
+        <strong>Nenhuma cobrança registrada ainda</strong>
+        <p>As cobranças desta conta aparecem aqui conforme os meses forem passando.</p>
+      </div>
+    } @else {
+      <ul class="resumo">
+        <li>
+          <span>Pagas</span>
+          <strong>{{ qtdPagas() }}</strong>
+        </li>
+        <li [class.resumo__alerta]="qtdAbertas() > 0">
+          <span>Em aberto</span>
+          <strong>{{ qtdAbertas() }}</strong>
+        </li>
+        <li>
+          <span>Total pago</span>
+          <strong>{{ moeda(totalPago()) }}</strong>
+        </li>
+      </ul>
+
+      <ul class="lista">
+        @for (p of itens(); track p.id) {
+          <li class="linha">
+            <span class="linha__mes">{{ mes(p.dataVencimento) }}</span>
+            <span class="linha__valor">{{ moeda(p.valor) }}</span>
+            <span class="selo selo--{{ p.status === 'pago' ? 'paga' : p.situacao }}">{{ rotulo(p) }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</div>

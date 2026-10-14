@@ -1,0 +1,40 @@
+@if (itens().length > 0) {
+  <div class="ticker" [class.ticker--pausado]="pausado()">
+    <span class="ticker__rotulo"><i></i>Resumo</span>
+
+    <div class="ticker__janela">
+      <div class="ticker__trilho" [style.animation-duration.s]="duracao()">
+        @for (item of itens(); track $index) {
+          <div class="item">
+            <b>{{ item.rotulo }}</b>
+            <strong>{{ item.destaque }}</strong>
+            <span [class]="'tom-' + (item.tom || 'neutro')">{{ item.detalhe }}</span>
+          </div>
+        }
+        <!-- Segunda cópia: faz a rolagem emendar sem pausa. -->
+        @for (item of itens(); track $index) {
+          <div class="item" aria-hidden="true">
+            <b>{{ item.rotulo }}</b>
+            <strong>{{ item.destaque }}</strong>
+            <span [class]="'tom-' + (item.tom || 'neutro')">{{ item.detalhe }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <button
+      class="ticker__pausa"
+      type="button"
+      [attr.aria-label]="pausado() ? 'Retomar rolagem' : 'Pausar rolagem'"
+      (click)="alternarPausa()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        @if (pausado()) {
+          <path d="M8 5v14l11-7z" />
+        } @else {
+          <path d="M9 5v14M15 5v14" />
+        }
+      </svg>
+    </button>
+  </div>
+}

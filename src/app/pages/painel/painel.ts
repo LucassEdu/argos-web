@@ -4,16 +4,19 @@ import { Auth } from '../../core/auth';
 import { AbaContas } from './aba-contas/aba-contas';
 import { AbaGraficos } from './aba-graficos/aba-graficos';
 import { AbaPerfil } from './aba-perfil/aba-perfil';
+import { AbaSuporte } from './aba-suporte/aba-suporte';
 import { AbaVencimentos } from './aba-vencimentos/aba-vencimentos';
+import { AvisosTela } from './avisos/avisos';
 import { Tema } from '../../core/tema';
 import { Sino } from './sino/sino';
+import { Ticker } from './ticker/ticker';
 
-type Aba = 'contas' | 'graficos' | 'vencimentos' | 'perfil';
+type Aba = 'contas' | 'graficos' | 'vencimentos' | 'perfil' | 'suporte';
 
-// Tela principal do app: faixa de topo (marca, ações, saudação) + quatro abas.
+// Tela principal do app: faixa de topo (marca, ações, saudação e ticker) + quatro abas e o suporte (botão de fones no topo).
 @Component({
   selector: 'app-painel',
-  imports: [AbaContas, AbaGraficos, AbaVencimentos, AbaPerfil, Sino],
+  imports: [AbaContas, AbaGraficos, AbaVencimentos, AbaPerfil, AbaSuporte, Sino, AvisosTela, Ticker],
   templateUrl: './painel.html',
   styleUrl: './painel.scss',
 })

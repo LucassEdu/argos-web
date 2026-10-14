@@ -17,12 +17,68 @@
 
 /* ---------- Faixa de topo ---------- */
 .faixa {
+  position: relative;
   background: var(--faixa);
   color: #fff;
   padding: 0.9rem 0 1.5rem;
 }
 
+// Logo grande na margem vazia à esquerda da faixa (fora da coluna do conteúdo, que tem 1100px).
+// O "calc" põe a logo no meio dessa margem, em qualquer largura de tela.
+.faixa__marca {
+  position: absolute;
+  top: 50%;
+  left: calc((100% - 1100px) / 4);
+  height: clamp(8rem, calc((100vw - 1100px) / 2.8), 12.5rem);
+  width: auto;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  opacity: 0.09;
+  pointer-events: none;
+  user-select: none;
+}
+
+// Em telas estreitas não sobra margem: a logo some, em vez de ficar cortada.
+@media (max-width: 1380px) {
+  .faixa__marca {
+    display: none;
+  }
+}
+
+.faixa__topo,
+.faixa__corpo {
+  position: relative;
+  z-index: 2; // fica acima da marca d'água e dos efeitos de fundo
+}
+
+// Efeitos de fundo da faixa (só CSS, atrás do conteúdo e sem receber cliques).
+// 1) Grão fino, mais forte à esquerda e esmaecendo para a direita.
+.faixa::before,
+.faixa::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.faixa::before {
+  opacity: 0.34;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mask-image: linear-gradient(100deg, #000 0%, transparent 70%);
+}
+
+// 2) Pontos concentrados no centro da faixa, sumindo para as laterais.
+.faixa::after {
+  opacity: 0.55;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1.5px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(45% 120% at 50% 50%, #000 0%, transparent 100%);
+}
+
 .faixa__topo {
+  z-index: 3; // acima do ticker: a janela de notificações abre por cima dele
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,15 +88,40 @@
 .marca {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 1.25rem;
+  gap: 0.7rem;
+  font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: -0.03em;
 
   img {
-    width: 28px;
+    width: 38px;
     height: auto;
     display: block;
+  }
+}
+
+// Ponto + lema ao lado do nome.
+.marca__ponto {
+  width: 6px;
+  height: 6px;
+  margin: 0 0.1rem 0 0.35rem;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.85;
+}
+
+.marca__lema {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+@media (max-width: 760px) {
+  .marca__ponto,
+  .marca__lema {
+    display: none;
   }
 }
 
@@ -64,6 +145,15 @@
 
   &:hover {
     background: rgba(255, 255, 255, 0.22);
+  }
+
+  &--ativo {
+    color: var(--faixa);
+    background: #fff;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
   }
 
   svg {
@@ -144,30 +234,37 @@ svg {
   }
 }
 
-.faixa__saudacao {
-  margin-top: 1.1rem;
-
-  h1 {
-    margin: 0;
-    font-size: clamp(1.5rem, 3.5vw, 2rem);
-    line-height: 1.15;
-  }
-
-  p {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    margin: 0.35rem 0 0;
-    font-size: 0.92rem;
-    color: rgba(255, 255, 255, 0.72);
-  }
+// Embaixo da linha da marca: saudação à esquerda, ticker no espaço que sobra.
+.faixa__corpo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: 1rem 2rem;
+  margin-top: 1.4rem;
 }
 
-.separador {
-  width: 4px;
-  height: 4px;
-  background: currentColor;
-  border-radius: 50%;
+.faixa__saudacao {
+  h1 {
+    margin: 0 0 0.65rem;
+    white-space: nowrap; // "Bom dia, Lucas" sempre na mesma linha
+    font-size: clamp(1.5rem, 3.2vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+}
+// Etiquetas arredondadas, no mesmo estilo dos selos da aba Perfil.
+.selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.selo {
+  padding: 0.28rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
 }
 
 /* ---------- Abas ---------- */
@@ -229,6 +326,16 @@ svg {
   display: none;
 }
 
+@media (max-width: 900px) {
+  .faixa__corpo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .faixa__marca {
+    display: none;
+  }
+}
+
 @media (max-width: 560px) {
   .interno {
     padding: 0 1rem;
@@ -246,6 +353,10 @@ svg {
 
   .aba__curto {
     display: inline;
+  }
+
+  .faixa__marca {
+    display: none;
   }
 
   .sair span,
