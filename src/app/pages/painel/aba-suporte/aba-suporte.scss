@@ -191,7 +191,7 @@ svg {
 }
 
 .botao-contato {
-  color: var(--cor-primaria);
+  color: #5e1a1e; // bordô fixo: no modo noturno a cor primária é clara demais sobre o botão branco
   background: #fff;
 
   &:hover {

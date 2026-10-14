@@ -1,59 +1,48 @@
-# OrganizadorContasWeb
+# Argos Web
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
+Interface web do **Argos**, um organizador de contas e assinaturas recorrentes. Feita em **Angular 22** com TypeScript e SCSS, consome a [argos-api](https://github.com/LucassEdu/argos-api).
 
-## Development server
+> Projeto de portfólio desenvolvido por **Lucas Eduardo Onofre**.
 
-To start a local development server, run:
+![Painel do Argos](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/contas.png)
 
-```bash
-ng serve
-```
+## Telas
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| | |
+| --- | --- |
+| ![Gráficos](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/graficos.png) | ![Próximos vencimentos](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/vencimentos.png) |
+| **Gráficos:** gasto por categoria e pagamentos dos últimos meses | **Próximos vencimentos:** linha do tempo e botão "Já paguei" |
+| ![Nova conta](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/nova-conta.png) | ![Perfil](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/perfil.png) |
+| **Nova conta:** catálogo de serviços com marcas ou serviço próprio | **Perfil:** foto, dados e troca de senha |
+| ![Suporte](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/suporte.png) | ![Tema claro](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/contas-claro.png) |
+| **Suporte:** perguntas frequentes e contato | **Tema claro** (o app também tem tema noturno) |
 
-## Code scaffolding
+Também há telas de [login](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/login.png) e [cadastro](https://raw.githubusercontent.com/LucassEdu/argos-web/main/docs/cadastro.png).
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Destaques
 
-```bash
-ng generate component component-name
-```
+- **Resumo rolante no topo** com o próximo vencimento, contas atrasadas, quanto já foi pago no mês, maior conta e categoria que mais pesa.
+- **Tema claro e noturno** com troca em um clique.
+- **Notificações** de vencimento no sino do cabeçalho.
+- **Histórico de pagamentos** por conta e marcação rápida de "Já paguei".
+- **Responsivo**, pensado para uso no celular.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Tecnologias
 
-```bash
-ng generate --help
-```
+Angular 22 (componentes standalone, signals e novo controle de fluxo `@if`/`@for`), TypeScript, SCSS com variáveis de tema e Chart.js para os gráficos.
 
-## Building
+## Como rodar
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+**Pré-requisitos:** Node.js e a [argos-api](https://github.com/LucassEdu/argos-api) rodando em `http://localhost:8080`.
 
 ```bash
-ng test
+npm install
+npx ng serve
 ```
 
-## Running end-to-end tests
+Abra `http://localhost:4200`.
 
-For end-to-end (e2e) testing, run:
+## Autor
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Lucas Eduardo Onofre**, estudante de Análise e Desenvolvimento de Sistemas, Manaus - AM.
+GitHub: [@LucassEdu](https://github.com/LucassEdu)
